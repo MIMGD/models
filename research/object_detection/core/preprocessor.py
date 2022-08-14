@@ -4725,8 +4725,11 @@ def preprocess(tensor_dict,
   for option in preprocess_options:
     func, params = option
     if func not in func_arg_map:
-      raise ValueError('The function %s does not exist in func_arg_map' %
-                       (func.__name__))
+        raise ValueError('The function %s does not exist in func_arg_map' %
+                         (func.__name__))
+    else:
+        print('ℹ️ ℹ️ ℹ️ Image Augmentation - applying step:', func.__name__)
+
     arg_names = func_arg_map[func]
     for a in arg_names:
       if a is not None and a not in tensor_dict:
@@ -4758,8 +4761,11 @@ def preprocess(tensor_dict,
   # changes the image to images (rank 3 to rank 4) to be compatible to what
   # we received in the first place
   if fields.InputDataFields.image in tensor_dict:
-    image = tensor_dict[fields.InputDataFields.image]
-    images = tf.expand_dims(image, 0)
-    tensor_dict[fields.InputDataFields.image] = images
+      image = tensor_dict[fields.InputDataFields.image]
+      images = tf.expand_dims(image, 0)
+
+      print('ℹ️ℹ️ℹ️ Image Augmentation over input image into tensor_dict', len(image), image.shape, images.shape)
+
+      tensor_dict[fields.InputDataFields.image] = images
 
   return tensor_dict
